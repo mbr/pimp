@@ -57,6 +57,7 @@ def do_install(args):
                     '--binary-only',
                     '--dist-dir', rpm_dir.name,
                     '--python', args.python,
+                    '--release', 'pimp',
             ]
 
             if args.quiet:
