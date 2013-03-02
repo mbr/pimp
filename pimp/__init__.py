@@ -14,6 +14,7 @@ import shutilwhich
 parser = argparse.ArgumentParser()
 parser.add_argument('--pip', default=None)
 parser.add_argument('--python', default=sys.executable)
+parser.add_argument('-q', '--quiet', action='store_true')
 subparsers = parser.add_subparsers(dest='action')
 install_parser = subparsers.add_parser('install')
 install_parser.add_argument('packages', nargs='+')
@@ -31,10 +32,13 @@ def do_install(args):
         argv = [
             args.pip_binary,
             'install',
-            '--quiet',
             '--no-install',
             '--build', download_dir.name,
         ]
+
+        if args.quiet:
+            argv.append('--quiet')
+
         argv.extend(args.packages)
 
         if args.pass_on_flags:
@@ -42,7 +46,7 @@ def do_install(args):
 
         # downloads packages
         print "Downloading packages."
-        subprocess.check_call(argv, cwd='/')
+        subprocess.check_call(argv)
 
         # build rpms
         for pkg_dir in os.listdir(download_dir.name):
@@ -50,19 +54,26 @@ def do_install(args):
             pkg_path = os.path.join(download_dir.name, pkg_dir)
             setuppy = os.path.join(pkg_path, 'setup.py')
             argv = [args.python, setuppy, '--quiet', 'bdist_rpm',
-                    '--quiet',
                     '--binary-only',
-                    '--dist-dir', rpm_dir.name
+                    '--dist-dir', rpm_dir.name,
+                    '--python', args.python,
             ]
+
+            if args.quiet:
+                argv.append('--quiet')
+
 
             with open('/dev/null', 'w') as devnull:
                 subprocess.check_call(argv, cwd=pkg_path,
-                                      stdout=devnull, stderr=devnull)
+                                      stdout=devnull if args.quiet else None,
+                                      stderr=devnull if args.quiet else None)
 
         # install rpms
         print 'Done building RPMs.'
-        for rpm in os.listdir(rpm_dir.name):
-            print os.path.join(rpm_dir.name, rpm)
+        argv = ['sudo', 'rpm', '-ivh']
+        argv.extend(os.path.join(rpm_dir.name, fn) for fn in os.listdir(rpm_dir.name))
+        subprocess.check_call(argv)
+        print 'Installation complete.'
 
 
 def main():
@@ -90,6 +101,3 @@ def main():
     {
         'install': do_install
     }[args.action](args)
-
-if __name__ == '__main__':
-    main()
