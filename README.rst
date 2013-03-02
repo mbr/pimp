@@ -19,7 +19,10 @@ install ``pimp``, first install pip and virtualenv using yum::
 
 After that, we'll bootstrap pimp with itself::
 
-  TMPDIR=`mktemp -d` && virtualenv --distribute $TMPDIR && $TMPDIR/bin/pip install pimp -U && $TMPDIR/bin/pimp --python /usr/bin/python install pimp -U && rm -rf $TMPDIR
+  TMPDIR=`mktemp -d` && virtualenv --distribute $TMPDIR && \
+  $TMPDIR/bin/pip install pimp -U &&\
+  $TMPDIR/bin/pimp --python /usr/bin/python install pimp -U &&\
+  rm -rf $TMPDIR
 
 This will create temporary directory and a new virtual environment in it,
 install ``pimp`` from PyPI, use ``pimp`` to package itself, install that
