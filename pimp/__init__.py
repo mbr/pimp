@@ -73,7 +73,7 @@ def do_install(args):
         print 'Done building RPMs.'
         rpms = [os.path.join(rpm_dir.name, fn) for fn in os.listdir(rpm_dir.name)]
         if rpms:
-            argv = ['sudo', 'rpm', '-ivh']
+            argv = ['sudo', 'rpm', '-Uivh']
             argv.extend(rpms)
             print 'Installing %d packages' % len(rpms)
             subprocess.check_call(argv)
