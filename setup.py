@@ -19,7 +19,7 @@ setup(
     author_email='git@marcbrinkmann.de',
     url='http://github.com/mbr/pimp',
     license='MIT',
-    install_requires=['pip', 'shutilwhich', 'tempdir'],
+    install_requires=['shutilwhich', 'tempdir'],
     packages=find_packages(exclude=['test']),
     entry_points={
         'console_scripts': [
