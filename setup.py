@@ -12,7 +12,7 @@ def read(fname):
 
 setup(
     name='pimp',
-    version='0.2.5dev',
+    version='0.2.6dev',
     description='pimp installs magic packages. Install rpm packages from PyPi. No refunds.',
     long_description=read('README.rst'),
     author='Marc Brinkmann',
