@@ -76,7 +76,7 @@ def do_install(args):
         if rpms:
             argv = ['sudo', 'yum', 'install']
             if args.assumeyes:
-                argv.append('--assume-yes')
+                argv.append('--assumeyes')
             argv.extend(rpms)
             print 'Installing %d packages' % len(rpms)
             subprocess.check_call(argv)
