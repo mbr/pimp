@@ -18,6 +18,7 @@ parser.add_argument('-q', '--quiet', action='store_true')
 subparsers = parser.add_subparsers(dest='action')
 install_parser = subparsers.add_parser('install')
 install_parser.add_argument('packages', nargs='+')
+install_parser.add_argument('-y', '--assumeyes', action='store_true')
 
 for short_opt, long_opt in (('-I', '--ignore-installed'),
                             ('-U', '--upgrade'),
@@ -74,6 +75,8 @@ def do_install(args):
         rpms = [os.path.join(rpm_dir.name, fn) for fn in os.listdir(rpm_dir.name)]
         if rpms:
             argv = ['sudo', 'yum', 'install']
+            if args.assumeyes:
+                argv.append('--assume-yes')
             argv.extend(rpms)
             print 'Installing %d packages' % len(rpms)
             subprocess.check_call(argv)
